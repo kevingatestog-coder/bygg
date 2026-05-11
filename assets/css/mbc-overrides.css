@@ -1,0 +1,637 @@
+/* ==========================================================================
+   MBC OVERRIDES — Malmö Byggcenter
+   Loaded last so its rules win over bundle.css and inline <style> blocks.
+   ========================================================================== */
+
+/* === INTER — self-hosted modern UI font (3 weights, ~340 KB total, swap) === */
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:url('../fonts/inter/Inter-Regular.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:600;
+  font-display:swap;
+  src:url('../fonts/inter/Inter-SemiBold.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:700;
+  font-display:swap;
+  src:url('../fonts/inter/Inter-Bold.woff2') format('woff2');
+}
+
+:root{
+  --mbc-yellow:#F5BF23;
+  --mbc-yellow-dark:#d6a715;
+  --mbc-dark:#0d0d0d;
+  --mbc-gray:#2d2d2d;
+  --mbc-light:#F6F6F6;
+  --mbc-font:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Apply Inter everywhere with system-font fallback */
+body, p, li, td, th, label, input, textarea, select, button, a, span, div, strong, em, small, blockquote{
+  font-family:var(--mbc-font) !important;
+}
+h1,h2,h3,h4,h5,h6{
+  font-family:var(--mbc-font) !important;
+  font-weight:700;
+  letter-spacing:-.005em;
+}
+.text-uppercase, .nav, .btn{
+  font-family:var(--mbc-font) !important;
+}
+.mbc-logo-text{
+  /* Logo keeps tighter spacing for visual identity */
+  font-family:var(--mbc-font) !important;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+
+/* ==========================================================================
+   1. HEADER — transparent on hero, white on scroll
+   ========================================================================== */
+
+/* Header default: TRANSPARENT — sits on top of hero. Override mall's white bg.
+   We use our own .mbc-scrolled class (set by mbc-init.js) instead of .scroll-css
+   because the template's script.js doesn't toggle scroll-css reliably at pageload. */
+header.fixed-top{
+  background:transparent !important;
+  background-color:transparent !important;
+  transition:background-color .35s cubic-bezier(.4,0,.2,1), box-shadow .35s cubic-bezier(.4,0,.2,1) !important;
+  border-bottom:none !important;
+  box-shadow:none !important;
+  will-change:background-color, box-shadow;
+}
+header.fixed-top .navbar,
+header.fixed-top .navbar-default,
+header.fixed-top .navbar-main,
+header.fixed-top .navbar-collapse{
+  background:transparent !important;
+  background-color:transparent !important;
+  box-shadow:none !important;
+  border:none !important;
+  transition:background-color .35s cubic-bezier(.4,0,.2,1), padding .35s cubic-bezier(.4,0,.2,1) !important;
+}
+header.fixed-top .navbar{
+  margin:0 !important;
+  min-height:74px;
+}
+/* CONSTANT padding both at top and on scroll → header height stays exactly the same,
+   so nav items never visually jump up */
+header.fixed-top .navbar-main,
+header.fixed-top.mbc-scrolled .navbar-main{
+  padding:14px 0 !important;
+}
+
+/* When scrolled past 40 px, header goes solid white */
+header.fixed-top.mbc-scrolled{
+  background:#fff !important;
+  background-color:#fff !important;
+  box-shadow:0 2px 12px rgba(0,0,0,.08) !important;
+}
+header.fixed-top.mbc-scrolled .navbar,
+header.fixed-top.mbc-scrolled .navbar-default,
+header.fixed-top.mbc-scrolled .navbar-main{
+  background:#fff !important;
+  background-color:#fff !important;
+}
+
+/* === FLEX-ALIGNED FULL NAVBAR (logo left + menu right, vertically centered)
+       Markup is: <navbar> > <navbar-main> > <container> > [<navbar-header>, <navbar-collapse>]
+       So we apply flex on .navbar-main > .container — that's the row. === */
+@media (min-width: 993px){
+  header.fixed-top .navbar-main > .container{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    min-height:74px;
+    padding-left:15px;
+    padding-right:15px;
+  }
+  header.fixed-top .navbar-header{
+    float:none !important;
+    margin:0 !important;
+    padding:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    flex:0 0 auto;
+  }
+  header.fixed-top .navbar-brand{
+    padding:0 !important;
+    margin:0 !important;
+    height:auto !important;
+    display:flex !important;
+    align-items:center !important;
+    line-height:1 !important;
+  }
+  header.fixed-top .navbar-collapse{
+    float:none !important;
+    padding:0 !important;
+    margin:0 !important;
+    flex:1 1 auto;
+    display:flex !important;
+    justify-content:flex-end !important;
+    align-items:center !important;
+    border:none !important;
+    max-height:none !important;
+  }
+  header.fixed-top .navbar .navbar-nav.navbar-right{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+    flex-wrap:nowrap;
+    float:none !important;
+    margin:0 !important;
+  }
+  header.fixed-top .navbar .navbar-nav.navbar-right > li{
+    display:flex !important;
+    align-items:center !important;
+    float:none !important;
+  }
+}
+
+/* === MENU TEXT COLORS === */
+/* Initial state (over hero): WHITE text with subtle shadow for legibility */
+header.fixed-top .navbar .navbar-nav > li > a{
+  color:#fff !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.45);
+  border:none !important;
+  padding:14px 18px !important;
+  font-weight:600;
+  font-size:12px;
+  letter-spacing:.06em;
+  background:transparent !important;
+  transition:color .25s ease, background-color .25s ease, text-shadow .25s ease, border-color .25s ease !important;
+  display:block;
+  line-height:1;
+}
+header.fixed-top .navbar .navbar-nav > li:hover > a,
+header.fixed-top .navbar .navbar-nav > li.active > a{
+  color:var(--mbc-yellow) !important;
+  background:transparent !important;
+}
+/* Kill the mall's ::before yellow rectangle on hover (overlaps text) */
+header.fixed-top .navbar .navbar-nav > li > a::before{
+  display:none !important;
+}
+
+/* When scrolled: dark text on white header */
+header.fixed-top.mbc-scrolled .navbar .navbar-nav > li > a{
+  color:var(--mbc-gray) !important;
+  text-shadow:none;
+}
+header.fixed-top.mbc-scrolled .navbar .navbar-nav > li:hover > a,
+header.fixed-top.mbc-scrolled .navbar .navbar-nav > li.active > a{
+  color:var(--mbc-yellow-dark) !important;
+}
+
+/* CTA "Kontakt" button: keep yellow always, aligned center via flex parent */
+header .navbar-nav > li > a.btn{
+  background:var(--mbc-yellow) !important;
+  color:#000 !important;
+  text-shadow:none !important;
+  border-radius:2px !important;
+  padding:11px 22px !important;
+  margin:0 0 0 18px !important;
+  font-weight:700;
+  border:2px solid var(--mbc-yellow) !important;
+  line-height:1 !important;
+  display:inline-block !important;
+  transition:background-color .25s ease, color .25s ease, border-color .25s ease, transform .15s ease !important;
+}
+header .navbar-nav > li > a.btn:hover{
+  background:#fff !important;
+  color:#000 !important;
+  border-color:#fff !important;
+  transform:translateY(-1px);
+}
+header.fixed-top.mbc-scrolled .navbar-nav > li > a.btn{
+  background:var(--mbc-yellow) !important;
+  color:#000 !important;
+  border-color:var(--mbc-yellow) !important;
+}
+header.fixed-top.mbc-scrolled .navbar-nav > li > a.btn:hover{
+  background:#000 !important;
+  color:var(--mbc-yellow) !important;
+  border-color:#000 !important;
+}
+
+/* Logo MBC badge */
+header .navbar-brand{
+  padding:14px 18px;
+  height:auto;
+}
+.mbc-logo-text{
+  color:#fff !important;
+  font-family:'Rajdhani','Arial Narrow',sans-serif;
+  font-weight:800;
+  letter-spacing:.05em;
+  font-size:22px;
+  line-height:1;
+  background:#000;
+  padding:9px 14px 7px 14px;
+  border:2px solid var(--mbc-yellow);
+  display:inline-block;
+  text-decoration:none;
+}
+.mbc-logo-text small{
+  display:block;
+  font-size:8.5px;
+  letter-spacing:.18em;
+  margin-top:3px;
+  color:var(--mbc-yellow) !important;
+  font-weight:700;
+}
+header .navbar-brand:hover{text-decoration:none}
+
+/* Hamburger toggle on mobile */
+header .navbar-toggle{
+  margin-top:18px;
+  margin-right:6px;
+  background:transparent;
+  border:1px solid rgba(255,255,255,.5);
+  padding:8px 12px;
+}
+header .navbar-toggle .fa{color:#fff;font-size:20px}
+header.fixed-top.mbc-scrolled .navbar-toggle{border-color:#999}
+header.fixed-top.mbc-scrolled .navbar-toggle .fa{color:#333}
+
+/* ==========================================================================
+   2. DROPDOWN MENU — wider, readable, doesn't overflow
+   ========================================================================== */
+@media (min-width: 993px){
+  header .navbar .dropdown-menu{
+    background:#fff !important;
+    box-shadow:0 8px 20px rgba(0,0,0,.15) !important;
+    border:none !important;
+    border-radius:0 0 4px 4px !important;
+    padding:6px 0 !important;
+    min-width:240px !important;
+    width:auto !important;
+    max-width:320px !important;
+    margin:0 !important;
+    border-top:3px solid var(--mbc-yellow) !important;
+  }
+  header .navbar .dropdown-menu > li{
+    width:auto !important;
+  }
+  header .navbar .dropdown-menu > li > a{
+    color:var(--mbc-gray) !important;
+    background:#fff !important;
+    padding:10px 18px !important;
+    font-size:12px !important;
+    text-transform:uppercase !important;
+    letter-spacing:.04em !important;
+    font-weight:500;
+    text-shadow:none !important;
+    line-height:1.3 !important;
+    white-space:nowrap;
+    border:none !important;
+  }
+  header .navbar .dropdown-menu > li > a::before{display:none !important}
+  header .navbar .dropdown-menu > li:hover > a,
+  header .navbar .dropdown-menu > li.active > a{
+    color:#000 !important;
+    background:var(--mbc-yellow) !important;
+  }
+
+  /* The "Tjänster" dropdown has 12 items - wide enough for "Byggkonsulttjänster" */
+  header .navbar .dropdown-menu{
+    min-width:260px !important;
+  }
+}
+
+/* ==========================================================================
+   3. MOBILE NAV — readable, full-width, dark backdrop
+   ========================================================================== */
+@media (max-width: 992px){
+  header.fixed-top{
+    background:rgba(0,0,0,.92) !important;
+    background-color:rgba(0,0,0,.92) !important;
+  }
+  header.fixed-top.mbc-scrolled{
+    background:#0d0d0d !important;
+    background-color:#0d0d0d !important;
+  }
+  header .navbar-collapse{
+    background:#000;
+    border-top:1px solid rgba(255,255,255,.1);
+    max-height:80vh;
+    overflow-y:auto;
+  }
+  header .navbar .navbar-nav > li > a{
+    color:#fff !important;
+    text-shadow:none !important;
+    padding:14px 22px !important;
+    border-bottom:1px solid rgba(255,255,255,.06) !important;
+  }
+  header .navbar .dropdown-menu{
+    background:rgba(255,255,255,.06) !important;
+    border:none !important;
+    box-shadow:none !important;
+    padding:0 !important;
+    margin:0 !important;
+  }
+  header .navbar .dropdown-menu > li > a{
+    color:#ddd !important;
+    padding:11px 36px !important;
+    font-size:12px !important;
+  }
+  header .navbar .dropdown-menu > li > a:hover{
+    background:rgba(245,191,35,.15) !important;
+    color:var(--mbc-yellow) !important;
+  }
+  header .navbar-nav > li > a.btn{
+    margin:14px 22px !important;
+    text-align:center;
+    display:block !important;
+  }
+}
+
+/* ==========================================================================
+   4. HERO + PAGE-HERO — better spacing, tighter copy
+   ========================================================================== */
+.section-bg-image.parallax-window.white .container.content{
+  padding-top:30px;
+}
+.section-bg-image .row.vertical-row > [class*="col-md-"] h1,
+.section-bg-image .row.vertical-row > [class*="col-md-"] h2{
+  font-size:48px !important;
+  line-height:1.1 !important;
+  font-weight:700 !important;
+}
+.flexslider.slider .slides h1{font-size:54px !important;line-height:1.1 !important;font-weight:700 !important;color:#fff !important}
+@media (max-width:768px){
+  .flexslider.slider .slides h1{font-size:32px !important;line-height:1.15 !important}
+  .section-bg-image .row.vertical-row > [class*="col-md-"] h1,
+  .section-bg-image .row.vertical-row > [class*="col-md-"] h2{font-size:32px !important}
+}
+
+/* Page hero (sub-pages) */
+.page-hero h1{font-size:48px !important;line-height:1.1 !important;text-transform:uppercase;letter-spacing:.04em}
+.page-hero p{font-size:17px;line-height:1.5;max-width:720px;margin-left:auto;margin-right:auto}
+@media (max-width:768px){.page-hero h1{font-size:30px !important}.page-hero p{font-size:15px}}
+
+/* ==========================================================================
+   5. ICONS — guarantee visibility
+   ========================================================================== */
+[class^="im-"], [class*=" im-"]{
+  font-family:'icomoon' !important;
+  font-style:normal;
+  font-weight:normal;
+  font-variant:normal;
+  text-transform:none;
+  line-height:1;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  display:inline-block;
+}
+.icon-box i.text-xl,.icon-box i.text-xxl{
+  font-size:48px !important;
+  color:var(--mbc-yellow);
+  display:inline-block;
+}
+.icon-box-cell i{display:inline-block}
+.advs-box .icon-box i.icon{
+  font-size:54px !important;
+  color:var(--mbc-yellow);
+}
+
+/* Quick alias glyphs — if a class fails to load, fall back to FontAwesome glyphs */
+.fa{display:inline-block;font:normal normal normal 14px/1 FontAwesome;font-size:inherit;text-rendering:auto;-webkit-font-smoothing:antialiased}
+
+/* ==========================================================================
+   6. CARDS / SERVICE GRID — uniform sizing, no text overflow
+   ========================================================================== */
+.svc-card,.mbc-segment-card,.proj-card,.rel-card,.seg-card,.news-card{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  text-decoration:none !important;
+}
+.svc-card .body,.proj-card .body,.rel-card .body,.news-card .body{flex:1;display:flex;flex-direction:column}
+.svc-card h3,.proj-card h3,.rel-card h4,.seg-card h3,.news-card h3{
+  margin:0 0 6px;
+  word-wrap:break-word;
+  hyphens:auto;
+}
+.svc-card p,.proj-card .meta,.news-card p{
+  margin:0;
+  word-wrap:break-word;
+  overflow-wrap:break-word;
+  hyphens:auto;
+}
+.svc-card .more,.rel-card .more{margin-top:auto;padding-top:10px}
+
+/* Equal-height row for cards */
+.section-empty .row [class*="col-md-"] > .svc-card,
+.section-empty .row [class*="col-md-"] > .seg-card,
+.section-empty .row [class*="col-md-"] > .mbc-segment-card{margin-bottom:30px}
+
+/* Segment card on home: 2-line min so labels align */
+.mbc-segment-card .lbl{padding:18px 22px;min-height:84px}
+.mbc-segment-card .lbl strong{display:block;font-family:'Rajdhani',sans-serif;font-size:18px;text-transform:uppercase;letter-spacing:.04em;line-height:1.2}
+
+/* ==========================================================================
+   7. TEAM CARDS — long emails get truncated cleanly
+   ========================================================================== */
+.member a,.mbc-team-card a{
+  display:block;
+  font-size:13px;
+  color:#444;
+  line-height:1.5;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:100%;
+}
+.member a.tel{color:var(--mbc-yellow-dark);font-weight:700}
+.member h4,.mbc-team-card h4{
+  margin:8px 0 4px;
+  font-size:16px;
+  word-wrap:break-word;
+}
+
+/* ==========================================================================
+   8. BUTTONS — consistent yellow CTA
+   ========================================================================== */
+.btn,.btn:visited{
+  font-family:var(--mbc-font) !important;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  border-radius:2px;
+  padding:12px 22px;
+  font-size:13px;
+  transition:background .2s, color .2s, border-color .2s, transform .15s ease;
+  display:inline-block;
+  cursor:pointer;
+}
+.btn-lg{padding:14px 30px;font-size:14px}
+.btn-sm{padding:8px 14px;font-size:12px}
+
+/* Filled (yellow) — always same on any background */
+.btn:not(.btn-border){
+  background:var(--mbc-yellow);
+  color:#000 !important;
+  border:2px solid var(--mbc-yellow);
+}
+.btn:not(.btn-border):hover{
+  background:var(--mbc-dark);
+  color:var(--mbc-yellow) !important;
+  border-color:var(--mbc-dark);
+}
+
+/* Border button — DEFAULT = dark text/border (works on white sections) */
+.btn-border{
+  background:transparent !important;
+  color:var(--mbc-dark) !important;
+  border:2px solid var(--mbc-dark) !important;
+  border-color:var(--mbc-dark) !important;
+}
+.btn-border:hover{
+  background:var(--mbc-dark) !important;
+  color:#fff !important;
+  border-color:var(--mbc-dark) !important;
+}
+
+/* AUTO-CONTRAST: on dark backgrounds (CTA images, mbc-bg-dark, header), flip to white */
+.section-bg-image .btn-border,
+.mbc-bg-dark .btn-border,
+header .btn-border,
+.page-hero .btn-border,
+.proj-hero .btn-border{
+  color:#fff !important;
+  border-color:#fff !important;
+  background:transparent !important;
+}
+.section-bg-image .btn-border:hover,
+.mbc-bg-dark .btn-border:hover,
+header .btn-border:hover,
+.page-hero .btn-border:hover,
+.proj-hero .btn-border:hover{
+  background:#fff !important;
+  color:var(--mbc-dark) !important;
+  border-color:#fff !important;
+}
+
+/* Yellow accent text utility */
+.text-color{color:var(--mbc-yellow) !important}
+
+/* ==========================================================================
+   9. FOOTER — readable, clean alignment
+   ========================================================================== */
+footer.footer-base{padding:60px 0 24px;background:#0d0d0d}
+footer.footer-base .col-md-4 h3{
+  color:#fff !important;
+  font-size:14px;
+  letter-spacing:.1em;
+  margin:0 0 18px;
+  text-transform:uppercase;
+  font-weight:700;
+}
+footer.footer-base .ul-squares{padding-left:0}
+footer.footer-base .ul-squares li{
+  list-style:none;
+  padding:6px 0 6px 18px;
+  position:relative;
+  color:#bbb;
+  font-size:13px;
+}
+footer.footer-base .ul-squares li:before{
+  content:"";
+  position:absolute;
+  left:0;top:13px;
+  width:7px;height:7px;
+  background:var(--mbc-yellow);
+}
+footer.footer-base .ul-squares a{color:#bbb;text-decoration:none}
+footer.footer-base .ul-squares a:hover{color:var(--mbc-yellow);text-decoration:none}
+footer.footer-base .footer-menu a{
+  display:block;
+  color:#bbb;
+  text-decoration:none;
+  padding:6px 0;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+footer.footer-base .footer-menu a:hover{color:var(--mbc-yellow)}
+footer.footer-base .copy-row{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;margin-top:36px}
+footer.footer-base .copy-text{color:#777 !important;font-size:12px;text-align:left}
+footer.footer-base .social-group a{
+  display:inline-block;
+  width:36px;height:36px;line-height:36px;
+  text-align:center;
+  background:rgba(255,255,255,.06);
+  color:#bbb !important;
+  margin-right:6px;
+  border-radius:50%;
+  text-decoration:none;
+}
+footer.footer-base .social-group a:hover{background:var(--mbc-yellow);color:#000 !important}
+footer.footer-base .social-group a i{font-size:13px;color:inherit !important}
+
+/* ==========================================================================
+   10. SECTION SPACING + BACKGROUND — tighter and consistent
+   ========================================================================== */
+.section-empty{padding:80px 0}
+.section-empty.bg-white{background:#fff}
+.section-empty.mbc-bg-dark{background:#111;color:#fff}
+.section-empty.mbc-bg-dark h2,.section-empty.mbc-bg-dark h3,.section-empty.mbc-bg-dark h4{color:#fff}
+.section-empty.mbc-bg-dark p{color:#dcdcdc}
+@media (max-width:768px){.section-empty{padding:50px 0}}
+
+/* H2 / H3 typography */
+h2{font-family:'Rajdhani',sans-serif;font-size:36px;font-weight:700;letter-spacing:.02em;line-height:1.15;margin-top:0}
+h3{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:600;letter-spacing:.02em;line-height:1.2}
+@media (max-width:768px){h2{font-size:26px}h3{font-size:18px}}
+
+/* ==========================================================================
+   11. PROJECT GALLERY (project-detail pages)
+   ========================================================================== */
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.gal a{display:block;position:relative;padding-bottom:75%;overflow:hidden;border-radius:3px;background:#222}
+.gal a img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+.gal a:hover img{transform:scale(1.05)}
+@media (max-width:900px){.gal{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.gal{grid-template-columns:1fr}}
+
+/* ==========================================================================
+   12. MISC — global resets / containers
+   ========================================================================== */
+img{max-width:100%;height:auto}
+iframe{max-width:100%}
+.text-center{text-align:center}
+.width-650{max-width:650px;margin:0 auto}
+
+/* Preloader hidden — we don't want a spinning splash */
+#preloader{display:none !important}
+
+/* Scroll-to-top arrow */
+.scroll-top.scroll-top-mobile{
+  position:fixed;
+  right:20px;bottom:20px;
+  width:42px;height:42px;
+  background:var(--mbc-yellow);
+  color:#000 !important;
+  text-align:center;
+  line-height:42px;
+  border-radius:50%;
+  font-size:18px;
+  z-index:999;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s;
+}
+.scroll-top.scroll-top-mobile.show{opacity:.9;pointer-events:auto}
+.scroll-top.scroll-top-mobile:hover{opacity:1}

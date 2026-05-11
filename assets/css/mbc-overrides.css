@@ -309,49 +309,201 @@ header.fixed-top.mbc-scrolled .navbar-toggle .fa{color:#333}
 }
 
 /* ==========================================================================
-   3. MOBILE NAV — readable, full-width, dark backdrop
+   3. MOBILE NAV — fullscreen overlay menu
    ========================================================================== */
+
+/* Hamburger icon — explicit FontAwesome glyph (line-icons.min.css blanked the content) */
+.navbar-toggle .fa-bars::before,
+header .fa-bars::before,
+i.fa-bars::before{
+  content:"\f0c9" !important;
+  font-family:"FontAwesome" !important;
+  font-weight:normal !important;
+  font-style:normal !important;
+  display:inline-block;
+  font-size:20px;
+  line-height:1;
+}
+/* Hamburger blir kryss (X) när menyn är öppen */
+header.mbc-mobile-open .navbar-toggle .fa-bars::before{
+  content:"\f00d" !important;
+  font-size:22px;
+}
+
 @media (max-width: 992px){
+  /* Header: transparent vid topp, svart vid scroll OCH när menyn är öppen */
   header.fixed-top{
-    background:rgba(0,0,0,.92) !important;
-    background-color:rgba(0,0,0,.92) !important;
+    min-height:64px;
+    background:transparent !important;
+    background-color:transparent !important;
   }
-  header.fixed-top.mbc-scrolled{
+  header.fixed-top.mbc-scrolled,
+  header.fixed-top.mbc-mobile-open{
     background:#0d0d0d !important;
     background-color:#0d0d0d !important;
   }
-  header .navbar-collapse{
-    background:#000;
-    border-top:1px solid rgba(255,255,255,.1);
-    max-height:80vh;
-    overflow-y:auto;
+  header.fixed-top .navbar-main,
+  header.fixed-top.mbc-scrolled .navbar-main,
+  header.fixed-top.mbc-mobile-open .navbar-main{
+    padding:10px 0 !important;
   }
-  header .navbar .navbar-nav > li > a{
-    color:#fff !important;
-    text-shadow:none !important;
-    padding:14px 22px !important;
-    border-bottom:1px solid rgba(255,255,255,.06) !important;
-  }
-  header .navbar .dropdown-menu{
-    background:rgba(255,255,255,.06) !important;
-    border:none !important;
-    box-shadow:none !important;
+
+  /* Hamburger toggle: 44x44 with strong contrast */
+  header.fixed-top .navbar-toggle{
+    width:44px !important;
+    height:44px !important;
     padding:0 !important;
-    margin:0 !important;
+    margin:10px 8px 10px 0 !important;
+    background:rgba(0,0,0,.55) !important;
+    border:1.5px solid rgba(255,255,255,.7) !important;
+    border-radius:6px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    z-index:10001 !important;
+    position:relative !important;
+    transition:background-color .25s ease, border-color .25s ease, transform .15s ease !important;
   }
+  header.fixed-top .navbar-toggle:hover{transform:scale(1.05)}
+  header.fixed-top .navbar-toggle .fa{
+    color:#fff !important;
+    margin:0 !important;
+    line-height:1 !important;
+  }
+  header.fixed-top.mbc-scrolled .navbar-toggle{
+    background:rgba(255,255,255,.08) !important;
+    border-color:rgba(255,255,255,.4) !important;
+  }
+  /* When mobile menu open: yellow toggle (explicit color + bg-color to win shorthand wars) */
+  header.fixed-top.mbc-mobile-open .navbar-toggle,
+  header.fixed-top.bg-transparent.mbc-mobile-open .navbar-toggle{
+    background:#F5BF23 !important;
+    background-color:#F5BF23 !important;
+    border:1.5px solid #F5BF23 !important;
+    border-color:#F5BF23 !important;
+  }
+  header.fixed-top.mbc-mobile-open .navbar-toggle .fa,
+  header.fixed-top.bg-transparent.mbc-mobile-open .navbar-toggle .fa{
+    color:#000 !important;
+  }
+
+  /* The collapse panel becomes a fullscreen overlay
+     Closed = display:none (totally hidden, no layout)
+     Open = fixed fullscreen with fade-in via opacity */
+  header.fixed-top .navbar-collapse{
+    display:none !important;
+    visibility:hidden !important;
+    opacity:0 !important;
+    transition:opacity .25s ease !important;
+  }
+  header.fixed-top.mbc-mobile-open .navbar-collapse{
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    position:fixed !important;
+    top:0 !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    width:100vw !important;
+    height:100vh !important;
+    height:100dvh !important;
+    background:linear-gradient(180deg,#0d0d0d 0%,#1a1a1a 100%) !important;
+    margin:0 !important;
+    padding:80px 0 40px !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    z-index:9998 !important;
+    max-height:none !important;
+    border:none !important;
+  }
+
+  /* Reset nav structure for mobile */
+  header.fixed-top .navbar .navbar-nav,
+  header.fixed-top .navbar .navbar-nav.navbar-right{
+    display:block !important;
+    margin:0 !important;
+    padding:0 !important;
+    width:100% !important;
+    float:none !important;
+  }
+  header.fixed-top .navbar .navbar-nav > li{
+    display:block !important;
+    width:100% !important;
+    float:none !important;
+  }
+  /* Top-level menu items: large, prominent */
+  header.fixed-top .navbar .navbar-nav > li > a{
+    color:#fff !important;
+    background:transparent !important;
+    font-size:17px !important;
+    font-weight:700 !important;
+    letter-spacing:.05em !important;
+    padding:18px 30px !important;
+    text-shadow:none !important;
+    text-align:left !important;
+    border:none !important;
+    border-bottom:1px solid rgba(255,255,255,.06) !important;
+    display:block !important;
+    line-height:1.3 !important;
+    text-transform:uppercase !important;
+  }
+  header.fixed-top .navbar .navbar-nav > li:hover > a,
+  header.fixed-top .navbar .navbar-nav > li.active > a,
+  header.fixed-top .navbar .navbar-nav > li > a:focus{
+    color:var(--mbc-yellow) !important;
+    background:rgba(245,191,35,.06) !important;
+  }
+  header .navbar .navbar-nav > li > a .caret{display:none !important}
+
+  /* Dropdowns always-expanded on mobile (no click-to-toggle) */
+  header .navbar .dropdown-menu{
+    position:static !important;
+    float:none !important;
+    background:rgba(0,0,0,.35) !important;
+    box-shadow:none !important;
+    border:none !important;
+    border-radius:0 !important;
+    border-top:none !important;
+    margin:0 !important;
+    padding:6px 0 !important;
+    min-width:0 !important;
+    width:100% !important;
+    max-width:none !important;
+  }
+  header .navbar .dropdown-menu > li{display:block !important; width:100% !important}
   header .navbar .dropdown-menu > li > a{
-    color:#ddd !important;
-    padding:11px 36px !important;
-    font-size:12px !important;
+    color:#bbb !important;
+    background:transparent !important;
+    font-size:14px !important;
+    padding:12px 50px !important;
+    text-transform:none !important;
+    font-weight:500 !important;
+    letter-spacing:0 !important;
+    border-bottom:1px solid rgba(255,255,255,.04) !important;
+    white-space:normal !important;
+    line-height:1.4 !important;
   }
   header .navbar .dropdown-menu > li > a:hover{
-    background:rgba(245,191,35,.15) !important;
+    background:rgba(245,191,35,.12) !important;
     color:var(--mbc-yellow) !important;
   }
-  header .navbar-nav > li > a.btn{
-    margin:14px 22px !important;
-    text-align:center;
+
+  /* Kontakt-knappen blir CTA-block längst ner i menyn */
+  header.fixed-top .navbar .navbar-nav > li > a.btn,
+  header.fixed-top .navbar .navbar-nav.navbar-right > li > a.btn{
     display:block !important;
+    margin:30px 30px 12px !important;
+    text-align:center !important;
+    font-size:15px !important;
+    padding:16px 24px !important;
+    border-radius:3px !important;
+    text-transform:uppercase !important;
+    letter-spacing:.06em !important;
+    background:#F5BF23 !important;
+    background-color:#F5BF23 !important;
+    color:#000 !important;
+    border:2px solid #F5BF23 !important;
   }
 }
 
@@ -369,9 +521,46 @@ header.fixed-top.mbc-scrolled .navbar-toggle .fa{color:#333}
 }
 .flexslider.slider .slides h1{font-size:54px !important;line-height:1.1 !important;font-weight:700 !important;color:#fff !important}
 @media (max-width:768px){
-  .flexslider.slider .slides h1{font-size:32px !important;line-height:1.15 !important}
+  .flexslider.slider .slides h1,
   .section-bg-image .row.vertical-row > [class*="col-md-"] h1,
-  .section-bg-image .row.vertical-row > [class*="col-md-"] h2{font-size:32px !important}
+  .section-bg-image .row.vertical-row > [class*="col-md-"] h2{
+    font-size:28px !important;
+    line-height:1.15 !important;
+    margin-bottom:14px !important;
+  }
+  .section-bg-image .container.content p,
+  .section-bg-image .row.vertical-row > [class*="col-md-"] p{
+    font-size:15px !important;
+    line-height:1.5 !important;
+  }
+  /* Buttons full-width-ish on mobile in CTAs and hero */
+  .section-bg-image .btn,
+  .page-hero .btn,
+  .proj-hero .btn{
+    display:block !important;
+    width:auto !important;
+    max-width:280px !important;
+    margin:8px auto !important;
+    padding:14px 20px !important;
+    font-size:13px !important;
+  }
+  /* Stat numbers */
+  .mbc-stat .num{font-size:36px !important}
+  .mbc-stat .lab{font-size:11px !important}
+  /* Cards uniform image height */
+  .svc-card img,.mbc-segment-card img,.seg-card img{height:200px !important}
+  .mbc-team-card img{max-width:170px !important}
+  /* Form fields fit screen, prevent iOS zoom */
+  .contact-form .form-control,
+  input.form-control,
+  select.form-control,
+  textarea.form-control{font-size:16px !important}
+  /* Footer columns stack */
+  footer.footer-base{padding:40px 0 20px !important}
+  footer.footer-base .col-md-4{margin-bottom:30px}
+  footer.footer-base h3{font-size:13px !important;margin-bottom:14px !important}
+  /* Project gallery tighter */
+  .gal{gap:10px !important}
 }
 
 /* Page hero (sub-pages) */

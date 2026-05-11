@@ -32,6 +32,56 @@
     update();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll, { passive: true });
+
+    initMobileMenu(header);
+  }
+
+  function initMobileMenu(header) {
+    var toggle = header.querySelector('.navbar-toggle');
+    if (!toggle) return;
+
+    function close() {
+      header.classList.remove('mbc-mobile-open');
+      document.body.style.overflow = '';
+    }
+    function open() {
+      header.classList.add('mbc-mobile-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (header.classList.contains('mbc-mobile-open')) {
+        close();
+      } else {
+        open();
+      }
+    });
+
+    // Close on link click (except dropdown-toggle parents that just expand)
+    var menuLinks = header.querySelectorAll('.navbar-collapse a');
+    for (var i = 0; i < menuLinks.length; i++) {
+      menuLinks[i].addEventListener('click', function (e) {
+        if (this.classList.contains('dropdown-toggle')) return;
+        if (this.getAttribute('href') === '#' || this.getAttribute('href') === '') return;
+        close();
+      });
+    }
+
+    // ESC closes the overlay
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && header.classList.contains('mbc-mobile-open')) {
+        close();
+      }
+    });
+
+    // If viewport grows beyond mobile, close overlay automatically
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 992 && header.classList.contains('mbc-mobile-open')) {
+        close();
+      }
+    }, { passive: true });
   }
 
   if (document.readyState === 'loading') {
